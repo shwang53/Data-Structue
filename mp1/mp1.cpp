@@ -49,7 +49,7 @@ PNG myArt(unsigned int width, unsigned int height) {
   //png.resize(800,800);
 
 
-for(int i =0; i<800; i++ ){
+for(unsigned i =0; i<800; i++ ){
   for (unsigned x = i; x < 800-i; x++) {
       for (unsigned y = i; y < 800-i; y++){
           HSLAPixel & pixel = png.getPixel(x, y);

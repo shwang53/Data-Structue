@@ -5,8 +5,11 @@ This repository contains your code for CS 225!  Each assignment, you will merge 
 You can find additional information, including assignment descriptions, by visiting the course webpage: https://courses.engr.illinois.edu/cs225/
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> release/mp1
 =======
 >>>>>>> release/maketutorial
+=======
+>>>>>>> release/mp2

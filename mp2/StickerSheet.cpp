@@ -51,11 +51,11 @@ void StickerSheet::copy(StickerSheet const & other){
         yPos_[i] = other.yPos_[i];
         valid_[i] = other.valid_[i];
     }
-      cout << "LINE : 51" <<endl;
+    //  cout << "LINE : 51" <<endl;
 }
 
 void StickerSheet::clear(){
-  cout << "LINE : 31" <<endl;
+  //cout << "LINE : 31" <<endl;
   //clear or destroy helper function.
   if(sticker_ != NULL){
     delete[] sticker_; sticker_=NULL;
@@ -75,14 +75,14 @@ void StickerSheet::clear(){
   //   delete Final; Final = NULL;
   //
   // }
-    cout << "LINE : 60" <<endl;
+    //cout << "LINE : 60" <<endl;
 
 }
 
 StickerSheet::~StickerSheet(){
 
     clear();
-      cout << "LINE : 66" <<endl;
+      //cout << "LINE : 66" <<endl;
 }
 
 StickerSheet::StickerSheet(const StickerSheet & other){
@@ -92,23 +92,23 @@ StickerSheet::StickerSheet(const StickerSheet & other){
       valid_ = NULL;
      clear();
     copy(other);
-      cout << "LINE : 71" <<endl;
+      //cout << "LINE : 71" <<endl;
 }
 
 const StickerSheet & StickerSheet::operator=(const StickerSheet &other){
-    cout << "LINE : 75" <<endl;
+    //cout << "LINE : 75" <<endl;
     if(this != &other){
         clear();
         copy(other);
     }
     return *this;
-      cout << "LINE : 81" <<endl;
+    //  cout << "LINE : 81" <<endl;
 }
 
 
 void StickerSheet::changeMaxStickers(unsigned max){
 
-  cout << "LINE : 106" <<endl;
+  //cout << "LINE : 106" <<endl;
     Image * temp_s = new Image[max];
     //temp_s = sticker_;
 
@@ -119,7 +119,7 @@ void StickerSheet::changeMaxStickers(unsigned max){
     //temp_x = xPos_;
     unsigned * temp_y = new unsigned[max];
     //temp_y = yPos_;
-      cout << "LINE : 117" <<endl;
+    //  cout << "LINE : 117" <<endl;
 if(capacity_ > max){
   for(unsigned i =0; i< max; i++){
       temp_s[i] = sticker_[i];
@@ -146,14 +146,14 @@ if(capacity_ > max){
 }
 
 
-  cout << "LINE : 125" <<endl;
+  //cout << "LINE : 125" <<endl;
     delete[] sticker_; sticker_=NULL;
     delete[] xPos_; xPos_ = NULL;
     delete[] yPos_; yPos_ = NULL;
     delete[] valid_; valid_ = NULL;
 
 
-  cout << "LINE : 132" <<endl;
+  //cout << "LINE : 132" <<endl;
     capacity_ = max;
   //  Image* sticker_ = new Image[capacity_];
   //  unsigned * valid_ = new unsigned[capacity_];
@@ -170,25 +170,25 @@ if(capacity_ > max){
         xPos_ = temp_x;
         yPos_ = temp_y;
 //    }
-  cout << "LINE : 149" <<endl;
+//  cout << "LINE : 149" <<endl;
   // delete[] temp_s; temp_s = NULL;
    //delete[] temp_v; temp_v = NULL;
    //delete[] temp_x; temp_x = NULL;
    //delete[] temp_y; temp_y = NULL;
 
-  cout << "LINE : 154" <<endl;
+//  cout << "LINE : 154" <<endl;
 
 }
 
 
 int StickerSheet::addSticker (Image & sticker, unsigned x, unsigned y){
-    cout << "LINE : 162" <<endl;
+    //cout << "LINE : 162" <<endl;
   if(layer_ < capacity_){
     for(unsigned i=0; i<capacity_; i++){
         if( valid_[i] == 0){
         //    cout << "LINE : 113" <<endl;
             sticker_[i] = sticker;
-              cout << "LINE : 168" <<endl;
+            //  cout << "LINE : 168" <<endl;
             xPos_[i] = x;
             yPos_[i] = y;
             valid_[i] = 1;
@@ -197,10 +197,10 @@ int StickerSheet::addSticker (Image & sticker, unsigned x, unsigned y){
             break;
         }
     }
-      cout << "LINE : 177" <<endl;
+    //  cout << "LINE : 177" <<endl;
     return layer_;
   }else{
-      cout << "LINE : 180" <<endl;
+  //    cout << "LINE : 180" <<endl;
     return -1;
   }
 
@@ -222,8 +222,8 @@ void StickerSheet::removeSticker(unsigned index){
   //  sticker_[index] = NULL;
   if(index < capacity_){
     //sticker_[index]= ;
-    //xPos_[index] = 0;
-    //yPos_[index] = 0;
+    xPos_[index] = 0;
+    yPos_[index] = 0;
     valid_[index] = 0;
   }
 
@@ -240,7 +240,7 @@ Image* StickerSheet::getSticker (unsigned index) const{
 Image StickerSheet::render() const{
 
 
-    cout << "LINE : 214" <<endl;
+//    cout << "LINE : 214" <<endl;
   unsigned WIDTH_ = 0;
   unsigned HEIGHT_ = 0;
   bool check = false;
@@ -255,13 +255,9 @@ Image StickerSheet::render() const{
       check = true;
     }
   }
-
-    cout << "LINE : 226" <<endl;
+//    cout << "LINE : 226" <<endl;
   if(check){
-
     Final->resize(WIDTH_,HEIGHT_);
-
-
   for(unsigned i = 0; i<= layer_; i++){
     if(valid_[i] == 1){
         for(unsigned sticker_w = xPos_[i]; sticker_w < xPos_[i]+ sticker_[i].width(); sticker_w++){
@@ -276,14 +272,13 @@ Image StickerSheet::render() const{
               }
           }
         }
-
     }
   }
 }
-  cout << "LINE : 247" <<endl;
+  //cout << "LINE : 247" <<endl;
   Image out;
   out = *Final;
+    //cout << "LINE : 247" <<endl;
   delete Final; Final = NULL;
   return out;
-
 }

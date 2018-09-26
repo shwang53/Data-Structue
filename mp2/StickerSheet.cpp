@@ -276,9 +276,9 @@ Image StickerSheet::render() const{
   }
 }
   //cout << "LINE : 247" <<endl;
-  Image out;
-  out = *Final;
+  Image realFinal;
+  realFinal = *Final;
     //cout << "LINE : 247" <<endl;
   delete Final; Final = NULL;
-  return out;
+  return realFinal;
 }

@@ -9,6 +9,8 @@ int main() {
   //
 Image laptop; laptop.readFromFile("earth.png");
 Image ill; ill.readFromFile("tests/i.png");
+Image coder; coder.readFromFile("coder.png");
+Image home; home.readFromFile("home.png");
 
 // StickerSheet sheet(alma, 3);
 // sheet.addSticker(ill, 200, 200);
@@ -19,7 +21,10 @@ Image ill; ill.readFromFile("tests/i.png");
 //  sheet.removeSticker(0);
 StickerSheet sheet(laptop, 5);
 //sheet.addSticker(ill, 20, 200);
-sheet.addSticker(ill, 200, 200);
+
+sheet.addSticker(coder, 100, 200);
+sheet.addSticker(home, 300, 200);
+sheet.addSticker(ill, 200, 400);
 //s1.addSticker(ill, 40, 200);
 
 //StickerSheet s2(s1);

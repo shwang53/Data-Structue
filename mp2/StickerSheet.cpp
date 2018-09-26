@@ -128,7 +128,7 @@ if(capacity_ > max){
       temp_y[i] = yPos_[i];
   }
 
-}else if(capacity_ < max ){
+}else if(capacity_ <= max ){
   for(unsigned i =0; i< capacity_; i++){
       temp_s[i] = sticker_[i];
       temp_v[i] = valid_[i];

@@ -85,28 +85,24 @@ bool isBalanced(queue<char> input)
 template <typename T>
 void scramble(queue<T>& q)
 {
-    // optional: queue<T> q2;
+
     // Your code here
 
     stack<T> s;
+    int count = 0, part = 1, capacity = q.size();
 
-    int count = 0;
-    int part = 1;
-    int size = q.size();
-
-    while(count < size) {
+    while(count<capacity) {
         if(part % 2 == 1) { // odd
-            int length = part > (size-count) ? (size-count) : part;
+            int length = part > (capacity-count) ? (capacity-count) : part;
             for(int i = 0; i < length; i++) {
                 q.push(q.front());
                 q.pop();
             }
-            part++;
-            count += length;
+            part++; count += length;
         }
 
         else if(part % 2 == 0) { //even reverse
-            int length = part > (size-count) ? (size-count) : part;
+            int length = part > (capacity-count) ? (capacity-count) : part;
             for(int i = 0; i < length; i++) {
                 s.push(q.front());
                 q.pop();
@@ -115,8 +111,7 @@ void scramble(queue<T>& q)
                 q.push(s.top());
                 s.pop();
             }
-            part++;
-            count += length;
+            part++; count += length;
         }
     }
 }

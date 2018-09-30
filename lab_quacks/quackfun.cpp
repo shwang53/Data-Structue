@@ -67,8 +67,37 @@ bool isBalanced(queue<char> input)
 {
 
     // @TODO: Make less optimistic
-    return true;
+    stack<char> mystack;
+    int count1 =0;
+    int count2 =0;
+    //bool check = false;
+
+    if(input.empty()){ return true;}
+    else{
+      while(!input.empty()) {
+            //switch(input.front())
+            if(input.front() == '['){
+                mystack.push(input.front());
+                count1++;
+            }
+            if(input.front() ==  ']'){
+              if(mystack.empty()){ return false;}
+              if(mystack.top() == '['){mystack.pop();}
+              count2++;
+            }
+            input.pop();
+      }
+      if(count1 == count2 && mystack.empty()){
+          return true;
+      }else{
+        return false;
+      }
+
+  }
+
 }
+
+
 
 /**
  * Reverses even sized blocks of items in the queue. Blocks start at size
@@ -135,24 +164,29 @@ template <typename T>
 bool verifySame(stack<T>& s, queue<T>& q){
 
     // Your code here
-    bool same = true;
+    bool same = true; // reset to be true.
 
-    if(s.empty()){return true;}
+    if(s.empty()) {return true;} // if the stack is empty, return true.
     else{
-        T temp = s.top(); // get first stack and pop
-        s.pop();
+        T temp = s.top(); // temp stores the top of first stack
+        s.pop(); //and pop the stack.
 
-        same = verifySame(s, q); //recursive
-        s.push(temp); // push back
+        same = verifySame(s, q); //temp stores stack values until the stack is empty.(recursively)
+        s.push(temp); // push the originial stack value back to the stack, so it is unmodified.
 
+        //if same is true and this moment's(recursive case of) values of queue and stack(temp)
+        // are equal then same is true, will return true.
+        //if not equal, same is false, will return false.
+        //**check if matching bottom(lastest) stack and front queue.
         if (same == true && (q.front() == temp)){
             same = true;
         }else{
             same = false;
         }
 
-        q.push(q.front());
-        q.pop();
+        q.push(q.front()); //push the front value in the back of itself, so next queue fron can be compared with the stack.
+      //  T temp2 = q.front();
+        q.pop(); // pop the oldest so can get next value, no overlap value in the end. = unmodified.
 
         return same;
       }

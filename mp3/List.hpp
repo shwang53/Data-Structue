@@ -3,15 +3,15 @@
  * Doubly Linked List (MP 3).
  */
 
-
+#include <iostream>
 /**
- * Returns a ListIterator with a position at the beginning of
+ * Returns a ListIterator with a position at the tempoinning of
  * the List.
  */
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(nullptr);
+  return List<T>::ListIterator(head_);
 }
 
 /**
@@ -20,7 +20,7 @@ typename List<T>::ListIterator List<T>::begin() const {
 template <typename T>
 typename List<T>::ListIterator List<T>::end() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(nullptr);
+  return List<T>::ListIterator(NULL);
 }
 
 /**
@@ -121,8 +121,10 @@ void List<T>::reverse() {
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   /// @todo Graded in MP3.1
-  //empty list or single node list stay the same.
-  if(startPoint == NULL || endPoint == NULL || startPoint == endPoint) return;
+//  empty list or single node list stay the same.
+  if(startPoint == NULL || endPoint == NULL || startPoint == endPoint) {
+    return;
+  }else{
 
   ListNode * prev = NULL;
   ListNode * curr = startPoint;
@@ -139,6 +141,9 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 
 }
 
+
+}
+
 /**
  * Reverses blocks of size n in the current List. You should use your
  * reverse( ListNode * &, ListNode * & ) helper function in this method!
@@ -148,7 +153,23 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 template <typename T>
 void List<T>::reverseNth(int n) {
   /// @todo Graded in MP3.1
-}
+
+  // ListNode * start = head_;
+  // ListNode * end = head_;
+  // if(head_ == NULL || tail_ == NULL) {return;}
+  // while(start != NULL) {
+  //   end = start;
+  //   for(int i=0; i<(n-1); i++) {
+  //     if(end->next != NULL) {  end = end->next;  }
+  //   }
+  //   reverse(start,end);
+  //   start = end->next;
+  // }
+  
+
+  }
+
+
 
 /**
  * Modifies the List using the waterfall algorithm.
@@ -162,6 +183,25 @@ void List<T>::reverseNth(int n) {
 template <typename T>
 void List<T>::waterfall() {
   /// @todo Graded in MP3.1
+  ListNode * current = head_;
+  ListNode * nexto = current->next;
+
+ if((tail_ == NULL) || (head_ == NULL)) {return;}
+
+ while((current->next != NULL)) {
+
+   nexto = current->next;
+
+   if(nexto->next != NULL) {
+     current->next = nexto->next;
+     nexto->prev = current;
+   }
+   tail_->next = nexto;
+   nexto->prev = tail_;
+   tail_ = nexto;
+   tail_->next = NULL;
+   current = current->next;
+ }
 }
 
 /**
@@ -286,7 +326,7 @@ void List<T>::sort() {
  *
  * @param start Starting point of the chain.
  * @param chainLength Size of the chain to be sorted.
- * @return A pointer to the beginning of the now sorted chain.
+ * @return A pointer to the tempoinning of the now sorted chain.
  */
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {

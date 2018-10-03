@@ -162,12 +162,16 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   // }
   // startPoint = end ;
   // startPoint = prev;
+  if(startPoint == NULL || endPoint == NULL || startPoint == endPoint)
+  {return;}
   if (startPoint != endPoint) {
 		ListNode * current  = startPoint;
 		ListNode * after  = endPoint->next;
     ListNode * before = startPoint->prev;
 		while (current != after) {
-			swap(current->prev, current->next);
+      ListNode* temp = current->prev;
+      current->prev = current->next;
+      current->next = temp;
 			current = current->prev;
 		}
     ListNode * stPoint = startPoint;

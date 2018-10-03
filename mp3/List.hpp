@@ -5,7 +5,7 @@
 
 #include <iostream>
 /**
- * Returns a ListIterator with a position at the tempoinning of
+ * Returns a ListIterator with a position at the begininning of
  * the List.
  */
 template <typename T>
@@ -20,7 +20,7 @@ typename List<T>::ListIterator List<T>::begin() const {
 template <typename T>
 typename List<T>::ListIterator List<T>::end() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(tail_->next);
 }
 
 /**
@@ -58,20 +58,44 @@ void List<T>::_destroy() {
 template <typename T>
 void List<T>::insertFront(T const & ndata) {
   /// @todo Graded in MP3.1
+  // ListNode * temp = new ListNode(ndata);
+  // temp->prev = NULL;
+  // temp->next = NULL;
+  // if(head_==NULL){
+  //
+  // //  head = temp;
+  // //  temp->next =NULL;
+
+  // length_++;
+  // temp = NULL;
+
+  // if(!this->empty()){
+  //   ListNode* temp = new ListNode(ndata);
+  //   head_->prev = temp;
+  //   temp->next = head_;
+  //   temp->prev = NULL;
+  //   head_ = temp;
+  // }
+  // else{
+  //   head_ = new ListNode(ndata);
+  //   head_->next = NULL;
+  //   head_->prev = NULL;
+  //   tail_ = head_;
+  // }
+  // length_++;
+  ListNode * temp = new ListNode(ndata);
   if(this->empty()){
-    ListNode * temp = new ListNode(ndata);
-  //  head = temp;
-  //  temp->next =NULL;
-    head_ = temp;  // head_ is pointing temp;
-    tail_ = head_; // what 'head_' is pointing is tail.
-  }else {
-    ListNode * temp = new ListNode(ndata);
+    head_=temp;
+    head_->next = NULL;
+    head_->prev = NULL;
+    tail_ = head_;
+  }else{
+    head_->prev = temp;
     temp->next = head_;
     temp->prev = NULL;
     head_ = temp;
   }
-  length_++;
-
+    length_++;
 }
 
 /**
@@ -122,24 +146,51 @@ template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   /// @todo Graded in MP3.1
 //  empty list or single node list stay the same.
-  if(startPoint == NULL || endPoint == NULL || startPoint == endPoint) {
-    return;
-  }else{
+  // if(startPoint == NULL || endPoint == NULL || startPoint == endPoint) {
+  //   return;
+  // }
 
-  ListNode * prev = NULL;
-  ListNode * curr = startPoint;
-  ListNode * next = NULL;
+  // ListNode * prev = NULL;
+  // ListNode * curr = startPoint;
+  // ListNode * next = NULL;
+  //
+  // while(curr != NULL){
+  //     next = curr->next;
+  //     curr->next = prev;
+  //     prev = curr;
+  //     curr = next;
+  // }
+  // startPoint = end ;
+  // startPoint = prev;
+  if (startPoint != endPoint) {
+		ListNode * current  = startPoint;
+		ListNode * after  = endPoint->next;
+    ListNode * before = startPoint->prev;
+		while (current != after) {
+			swap(current->prev, current->next);
+			current = current->prev;
+		}
+    ListNode * stPoint = startPoint;
+    ListNode * ePoint = endPoint;
+		if (before == NULL) {
+			ePoint->prev = NULL;
+			head_ = ePoint;
+		} else if(before != NULL) {
+			before->next = ePoint;
+			ePoint->prev = before;
+		}
+		if (after == NULL) {
+			stPoint->next = NULL;
+			tail_ = stPoint;
+		} else if ( after != NULL) {
+			after->prev = stPoint;
+			stPoint->next = after;
+		}
+		startPoint = ePoint;
+		endPoint = stPoint;
+	}
 
-  while(curr != NULL){
-      next = curr->next;
-      curr->next = prev;
-      prev = curr;
-      curr = next;
-  }
-  endPoint = startPoint;
-  startPoint = prev;
 
-}
 
 
 }
@@ -154,18 +205,37 @@ template <typename T>
 void List<T>::reverseNth(int n) {
   /// @todo Graded in MP3.1
 
-  // ListNode * start = head_;
-  // ListNode * end = head_;
-  // if(head_ == NULL || tail_ == NULL) {return;}
-  // while(start != NULL) {
-  //   end = start;
-  //   for(int i=0; i<(n-1); i++) {
-  //     if(end->next != NULL) {  end = end->next;  }
-  //   }
-  //   reverse(start,end);
-  //   start = end->next;
-  // }
-  
+  ListNode * start = head_;
+  ListNode * end = head_;
+
+  if((head_ == NULL || tail_ == NULL)) {return;}
+
+  while(start != NULL) {
+    end = start;
+    for(int i=0; i<(n-1); i++) {
+      if(end->next != NULL) {  end = end->next;  }
+    }
+
+    reverse(start,end);
+
+    start = end->next;
+  }
+    // ListNode* current = head_;
+
+    //    }
+    //    endPoint = temp;
+    //     //std::cout << remain << std::endl;
+    //    reverse(startPoint, endPoint);
+    //    startPoint = startPoint->next;
+    //    temp = startPoint;
+    //    remain = remain - n;
+    //
+    //   }
+    //
+    //   endPoint = tail_;
+    //
+    //   reverse(startPoint,endPoint);
+
 
   }
 

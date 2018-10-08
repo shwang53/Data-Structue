@@ -89,7 +89,7 @@ class BinaryTree
         /**
          * @return The root of the binary tree
          */
-        Node* getRoot() const;  
+        Node* getRoot() const;
 
         /**
          * This lab deals with the following six helper functions:
@@ -115,6 +115,7 @@ class BinaryTree
          *  (not creating a flipped copy).
          */
         void mirror();
+        void mirrorRecur(Node *& temp);
 
         /**
          * isOrdered() function iterative version
@@ -131,6 +132,8 @@ class BinaryTree
          *  criterion for a binary tree to be a binary search tree.
          */
         bool isOrderedRecursive() const;
+        bool isOrderedRecurHelper (Node* node, T max, T min) const;
+
 
 
         /**
@@ -142,8 +145,9 @@ class BinaryTree
          * @param paths vector of vectors that contains path of nodes
          */
         void getPaths(vector<vector<T> > &paths) const;
+        void getPathsHelp(const Node* tempRoot, vector<vector<T> > &temp, vector<T> history) const;
 
-        /**
+          /**
          * Each node in a tree has a distance from the root node - the depth of that
          * node, or the number of edges along the path from that node to the root.
          * This function returns the sum of the distances of all nodes to the root
@@ -152,6 +156,7 @@ class BinaryTree
          * @return The sum of the distances of all nodes to the root
          */
         int sumDistances() const;
+        int sumDistances(Node * root, int sum) const;
 
         /**
          *  Uses vector to store values of the nodes of a binary tree in order.

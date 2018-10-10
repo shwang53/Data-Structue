@@ -336,7 +336,14 @@ List<T> List<T>::split(int splitPoint) {
 template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.2
-  return NULL;
+  if(splitPoint == 0){return start;}
+  if (start == NULL){ return NULL;}
+  for(int i = 0; i < splitPoint-1; i++) {  start = start->next; }
+  ListNode*tempead = start->next;
+  start->next = NULL;
+  tempead->prev = NULL;
+  return tempead;
+  //return NULL;
 }
 
 /**
@@ -374,10 +381,73 @@ void List<T>::mergeWith(List<T> & otherList) {
  * @param second The starting node of the second sequence.
  * @return The starting node of the resulting, sorted sequence.
  */
+// template <typename T>
+//  void List<T>::insertSorted(ListNode **head, ListNode *insert)const {
+//  //   // your code here!
+//
+//    if( *head == NULL || (*head)->data >= insert->data){
+//
+//        insert->next = *head;
+//        *head = insert;
+//
+//    }else{
+//
+//        ListNode * current = *head;
+//        while(current->next != NULL && current->next->data < insert->data){
+//            current = current->next;
+//        }
+//        insert->next = current->next;
+//        current->next = insert;
+//
+//    }
+//
+//  }
+// template <typename T>
+//  void List<T>::sortList(ListNode **head) {
+//
+//
+//    ListNode * tempead = NULL;
+//    ListNode * curHead = *head;
+//    ListNode * insert;
+//
+//    while ( curHead != NULL){
+//      insert = curHead;
+//      curHead = curHead->next;
+//      insert->next = NULL;
+//      insertSorted(&tempead, insert);
+//    }
+//    *head = tempead;
+//  }
+
+
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
-  /// @todo Graded in MP3.2
-  return NULL;
+
+
+if(first==NULL && second==NULL){return NULL;}
+else if(first == NULL) {return second;}
+else if(second == NULL){return first;}
+else{
+  ListNode* temp1 = first;
+  ListNode* temp2 = first;
+
+  bool check = (first->data < second->data) ? true : false;
+  temp1 = check ? first:second;
+  temp2 = check ? first:second;
+  first = check? first->next : first;
+  second = check? second: second->next;
+
+  while (first != NULL && second != NULL)
+  {
+      bool check = (first->data < second->data) ? true : false;
+      temp2->next = check? first : second;
+      temp2 = check?first : second;
+      first = check? first->next : first;
+      second = check? second:second->next;
+  }
+  temp2->next = first? first:second;
+  return temp1;
+}
 }
 
 /**
@@ -405,5 +475,22 @@ void List<T>::sort() {
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
-  return NULL;
+  if(chainLength == 1){return start;}
+
+  int total = chainLength;
+  chainLength = chainLength/2;
+
+
+  ListNode* temp1 = start;
+  ListNode* temp2 = split(temp1, chainLength);
+
+  ListNode* first = mergesort(temp1, chainLength);
+
+  ListNode* second = mergesort(temp2, total - chainLength);
+
+  ListNode* finally;
+  finally = merge(first, second);
+  return finally;
+
+
 }

@@ -61,6 +61,8 @@ class List {
     };
 
   public:
+    void sortList(ListNode **head);
+    void insertSorted(ListNode **head, ListNode *insert) const;
     /**
      * Default List constructor.
      * Creates an empty List. Implemented for you.

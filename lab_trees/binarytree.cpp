@@ -126,7 +126,7 @@ bool BinaryTree<T>::isOrderedIterative() const
     if(zero > (*it)->elem){return false;}
       zero = (*it)->elem;
 }
-return true;
+return true+;
 
 
 //     break;
@@ -181,9 +181,11 @@ void BinaryTree<T>::getPathsHelp(const Node* tempRoot, vector<vector<T>> &temp, 
 
   if(tempRoot != NULL){
     if (!tempRoot->left && !tempRoot->right) {
+
       temp.push_back(history);
       temp[temp.size()-1].push_back(tempRoot->elem);
       return;
+
     }
     history.push_back(tempRoot->elem);
     getPathsHelp(tempRoot->left, temp, history);

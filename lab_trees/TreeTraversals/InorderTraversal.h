@@ -77,6 +77,7 @@ class InorderTraversal : public TreeTraversal<T> {
 					 while(treeNode->left!= NULL){
 
 					 stack.push(treeNode->left);
+
 					 treeNode = treeNode->left;
 
 					 }

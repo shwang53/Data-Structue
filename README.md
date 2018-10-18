@@ -7,6 +7,7 @@ You can find additional information, including assignment descriptions, by visit
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> release/mp1
@@ -16,3 +17,5 @@ You can find additional information, including assignment descriptions, by visit
 >>>>>>> release/mp2
 =======
 >>>>>>> release/mp3
+=======
+>>>>>>> release/mp4

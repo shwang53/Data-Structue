@@ -24,7 +24,9 @@
 //  * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
 //  * it will not be included in this BFS
 //  */
-// BFS::BFS(const PNG & png, const Point & start, double tolerance) {
+// BFS::BFS(const PNG & png, const Point & start, double tolerance)
+// //  : png_(png), start_(start), tolerance_(tolerance)
+//  {
 //   /** @todo [Part 1] */
 //   png_ = png;
 //   start_ = start;
@@ -113,36 +115,43 @@
 //   //       queue_.push(up);
 //   // //      occupied[x_][y_+1]=1;
 //   //   }
-//   HSLAPixel origin = png_.getPixel(start_.x, start_.y);
+//
 // if(point.x < (png_.width()-1)){
-//  double real_tolr = calculateDelta(png_.getPixel(point.x+1, point.y), origin);
-//  if(real_tolr < tolerance_ && occupied[point.x+1][point.y] == 0){
-//    Point right(point.x+1, point.y);
-//    queue_.push(right);
+//  double cur_tolerance_ = calculateDelta(png_.getPixel(point.x+1, point.y), png_.getPixel(start_.x, start_.y));
+//
+//  if(cur_tolerance_ < tolerance_ && occupied[point.x+1][point.y] == 0){
+//    Point east(point.x+1, point.y);
+//    queue_.push(east);
 //   //    occupied[point.x+1][point.y]=1;
 //  }
 // }
+//
 // if(point.y < (png_.height() -1)){
-//  double real_told = calculateDelta(png_.getPixel(point.x, point.y+1), origin);
-//  if(real_told< tolerance_ && occupied[point.x][point.y+1] == 0){
-//    Point down(point.x, point.y+1);
-//    queue_.push(down);
+//  double cur_tolerance_ = calculateDelta(png_.getPixel(point.x, point.y+1), png_.getPixel(start_.x, start_.y));
+//
+//  if(cur_tolerance_< tolerance_ && occupied[point.x][point.y+1] == 0){
+//    Point south(point.x, point.y+1);
+//    queue_.push(south);
 //   //    occupied[point.x][point.y+1]=1;
 //  }
 // }
+//
 // if(point.x > 0 && point.x <= (png_.width()-1) ){
-//  double real_toll = calculateDelta(png_.getPixel(point.x-1, point.y), origin);
-//  if(real_toll < tolerance_ && occupied[point.x-1][point.y] == 0){
-//    Point left(point.x-1, point.y);
-//    queue_.push(left);
+//  double cur_tolerance_ = calculateDelta(png_.getPixel(point.x-1, point.y), png_.getPixel(start_.x, start_.y));
+//
+//  if(cur_tolerance_ < tolerance_ && occupied[point.x-1][point.y] == 0){
+//    Point west(point.x-1, point.y);
+//    queue_.push(west);
 //   //    occupied[point.x-1][point.y]=1;
 //  }
 // }
+//
 // if(point.y > 0 && point.y <= (png_.height() -1)){
-//  double real_tolu = calculateDelta(png_.getPixel(point.x, point.y-1), origin);
-//  if(real_tolu < tolerance_ && occupied[point.x][point.y-1] == 0){
-//    Point up(point.x, point.y -1);
-//    queue_.push(up);
+//  double cur_tolerance_ = calculateDelta(png_.getPixel(point.x, point.y-1), png_.getPixel(start_.x, start_.y));
+//
+//  if(cur_tolerance_ < tolerance_ && occupied[point.x][point.y-1] == 0){
+//    Point north(point.x, point.y -1);
+//    queue_.push(north);
 // //   occupied[point.x][point.y-1]=1;
 //
 //  }
@@ -193,128 +202,3 @@
 //   }
 //   delete occupied;
 // }
-#include <iterator>
-#include <cmath>
-#include <list>
-#include <queue>
-
-#include "../cs225/PNG.h"
-#include "../Point.h"
-
-#include "ImageTraversal.h"
-#include "BFS.h"
-
-using namespace cs225;
-
-/**
- * Initializes a breadth-first ImageTraversal on a given `png` image,
- * starting at `start`, and with a given `tolerance`.
- * @param png The image this BFS is going to traverse
- * @param start The start point of this BFS
- * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
- * it will not be included in this BFS
- */
-BFS::BFS(const PNG & png, const Point & start, double tolerance)
-: start_(start), png_(png),tolerance_(tolerance) {
-  /** @todo [Part 1] */
-
-  queue_.push(start);
-  startX = start.x;
-  startY = start.y;
-
-  unsigned int row = png.height();
-  unsigned int col = png.width();
-  visited.resize(col,vector<bool>(row));
-  for(unsigned int i = 0; i < col; i++)
-    for(unsigned int j = 0; j < row; j++){
-      visited[i][j] = false;
-    }
-    visited[startX][startY] = true;
-}
-
-/**
- * Returns an iterator for the traversal starting at the first point.
- */
-ImageTraversal::Iterator BFS::begin() {
-  /** @todo [Part 1] */
-  BFS * bfs = new BFS(png_, start_, tolerance_);
-  return ImageTraversal::Iterator(*bfs,start_);
-}
-
-/**
- * Returns an iterator for the traversal one past the end of the traversal.
- */
-ImageTraversal::Iterator BFS::end() {
-  /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
-}
-
-/**
- * Adds a Point for the traversal to visit at some point in the future.
- */
-void BFS::add(const Point & point) {
-  /** @todo [Part 1] */
-  unsigned int x = point.x;
-  unsigned int y = point.y;
-  HSLAPixel & startPixel = png_.getPixel(startX,startY);
-
-
-  if (x + 1 < png_.width() && !visited[x+1][y])
-    {
-      HSLAPixel & right = png_.getPixel(x + 1,y);
-      if(calculateDelta(right,startPixel) <=tolerance_){
-        queue_.push(Point(x+1,y));
-        visited[x+1][y] = true;
-      }
-    }
-  if (y + 1 < png_.height() && !visited[x][y+1]) {
-        HSLAPixel & right = png_.getPixel(x,y + 1);
-      if(calculateDelta(right,startPixel) <=tolerance_){
-        queue_.push(Point(x,y + 1));
-        visited[x][y + 1] = true;
-      }
-  }
-  if ((int)x - 1 >= 0 &&  !visited[x - 1][y]) {
-       HSLAPixel & right = png_.getPixel(x -1,y);
-      if(calculateDelta(right,startPixel) <=tolerance_){
-        queue_.push(Point(x-1,y));
-        visited[x-1][y] = true;
-      }
-  }
-  if ((int)y - 1 >= 0 &&  !visited[x][y - 1]) {
-       HSLAPixel & right = png_.getPixel(x ,y - 1);
-      if(calculateDelta(right,startPixel) <=tolerance_){
-        queue_.push(Point(x,y - 1));
-        visited[x][y - 1] = true;
-      }
-  }
-}
-
-/**
- * Removes and returns the current Point in the traversal.
- */
-Point BFS::pop() {
-  /** @todo [Part 1] */
-  Point topPoint = queue_.front();
-  queue_.pop();
-  return topPoint;
-}
-
-/**
- * Returns the current Point in the traversal.
- */
-Point BFS::peek() {
-  /** @todo [Part 1] */
-  if(!empty())
-  return queue_.front();
-  else
-  return Point(0,0);
-}
-
-/**
- * Returns true if the traversal is empty.
- */
-bool BFS::empty() const {
-  /** @todo [Part 1] */
-  return queue_.empty();
-}

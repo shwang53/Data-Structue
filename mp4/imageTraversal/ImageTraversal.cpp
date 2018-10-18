@@ -39,7 +39,7 @@ ImageTraversal::Iterator::Iterator() {
 ImageTraversal::Iterator::Iterator(ImageTraversal* tempo) {
   /** @todo [Part 1] */
     temp = tempo;
-    curr = curr->start_;
+    curr = temp->start_;
 }
 
 /**
@@ -75,12 +75,12 @@ Point ImageTraversal::Iterator::operator*() {
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
   bool compare1 = (temp == nullptr) ? true : false;
-  bool compare2 = (other.temp = nullptr) ? true : false;
+  bool compare2 = (other.temp == nullptr) ? true : false;
 
   compare1 = (compare1 == true) ? compare1 : temp->empty();
   compare2 = (compare2 == true) ? compare2 : other.temp->empty();
 
-  if(!compare1 && !compare2){return (temp != other.temp) ? true: false};
+  if(!compare1 && !compare2){return (temp != other.temp) ? true: false;}
 
   return (compare1 && compare2) ? false : true;
 

@@ -44,7 +44,7 @@ public:
     /** add private members here if neccesary*/
     ImageTraversal * temp;
     Point curr;
-    Point start_;
+    
 
   };
 
@@ -81,7 +81,7 @@ public:
    */
   virtual bool empty() const = 0;
 
-
+  Point start_;
 
 
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);

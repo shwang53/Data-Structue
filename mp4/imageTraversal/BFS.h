@@ -15,6 +15,9 @@
 
 #include "ImageTraversal.h"
 
+#include <vector>
+using namespace std;
+
 using namespace cs225;
 
 /**
@@ -24,24 +27,25 @@ using namespace cs225;
 class BFS : public ImageTraversal {
 public:
   BFS(const PNG & png, const Point & start, double tolerance);
-  ~BFS();
 
   ImageTraversal::Iterator begin();
   ImageTraversal::Iterator end();
 
   void add(const Point & point);
   Point pop();
-  Point peek() const;
+  Point peek();
   bool empty() const;
 
 private:
   /** @todo [Part 1] */
   /** add private members here*/
-  std::queue<Point> q;
+  //Point start_;
+	PNG png_;
+	double tolerance_;
+  vector<vector<bool>> occupied;
 
-  PNG pngbfs;
+	queue<Point> q;
 
-  double tolerancebfs;
 };
 
 #endif

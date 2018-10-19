@@ -27,29 +27,38 @@ public:
   /**
    * A forward iterator through an ImageTraversal.
    */
+
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
     Iterator();
-    Iterator(ImageTraversal*traversalold);
+
+    Iterator(ImageTraversal*temp){
+        traversal = temp;
+        curr = traversal->start_;
+    }
 
     Iterator & operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
 
+    // Iterator(ImageTraversal & traversal, Point start):traversal(&traversal),start(start.x,start.y)
+    // {
+    //   curr = traversal.peek();
+    // }
+
+
+
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
-    Point current;      //Originally in private, may have to make a getCurrent() function
-
 
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
     ImageTraversal * traversal;
-
-
+    Point curr;
 
   };
-  double getcalculateDelta(HSLAPixel & p1, HSLAPixel & p2);
+    Point start_;
   /**
    * The begining of an iterator
    * Virtual function. Derived class need to implement this
@@ -76,17 +85,14 @@ public:
    * Return but not remove the next point of the traversal
    * Virtual function. Derived class need to implement this
    */
-  virtual Point peek() const = 0;
+  virtual Point peek()  = 0;
   /**
    * To see if the traversal has no points left
    * Virtual function. Derived class need to implement this
    */
   virtual bool empty() const = 0;
 
-  int ** list;
-  Point start_;
 
-private:
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);
 };
 

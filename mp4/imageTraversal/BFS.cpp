@@ -19,27 +19,33 @@ using namespace cs225;
  * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
  * it will not be included in this BFS
  */
-BFS::BFS(const PNG & png, const Point & start, double tolerance) {
+BFS::BFS(const PNG & png, const Point & start, double tolerance)
+  {
   /** @todo [Part 1] */
-  pngbfs = png;
-  start_ = start;
-  tolerancebfs = tolerance;
-  q.push(start_);
-  list = new int*[png.width()];
-  for(unsigned i=0; i<png.width(); i++){
-    list[i] = new int[png.height()];
-    for(unsigned j=0; j<png.height(); j++){
-      list[i][j] = 0;
+  start_= start;
+  png_ = (png);
+  tolerance_ = (tolerance);
+
+  q.push(start);
+
+
+  occupied.resize(png.width(),vector<bool>(png_.height()));
+  for(unsigned int i = 0; i < png_.width(); i++)
+    for(unsigned int j = 0; j < png_.height(); j++){
+      occupied[i][j] = false;
     }
-  }
+    occupied[start_.x][start_.y] = true;
 }
+
 /**
  * Returns an iterator for the traversal starting at the first point.
  */
 ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
-  ImageTraversal * traversal = new BFS(pngbfs, start_, tolerancebfs);
-  return ImageTraversal::Iterator(traversal);
+  // BFS * temp = new BFS(png_, start_, tolerance_);
+  // return ImageTraversal::Iterator(*temp,start_);
+  ImageTraversal * traversal = new BFS(png_, start_, tolerance_);
+ return ImageTraversal::Iterator(traversal);
 }
 
 /**
@@ -47,7 +53,6 @@ ImageTraversal::Iterator BFS::begin() {
  */
 ImageTraversal::Iterator BFS::end() {
   /** @todo [Part 1] */
-
   return ImageTraversal::Iterator();
 }
 
@@ -56,34 +61,43 @@ ImageTraversal::Iterator BFS::end() {
  */
 void BFS::add(const Point & point) {
   /** @todo [Part 1] */
-  HSLAPixel origin = pngbfs.getPixel(start_.x, start_.y);
-  if(point.x < (pngbfs.width()-1)){
-    double real_tolr = getcalculateDelta(pngbfs.getPixel(point.x+1, point.y), origin);
-    if(real_tolr < tolerancebfs && list[point.x+1][point.y] == 0){
-      Point right(point.x+1, point.y);
-      q.push(right);
+
+  HSLAPixel & comparePixel = png_.getPixel(start_.x,start_.y);
+
+
+  if (point.x < png_.width() -1)
+    {
+      if(calculateDelta(png_.getPixel(point.x + 1,point.y),comparePixel) <=tolerance_  && !occupied[point.x+1][point.y]){
+        Point east(point.x+1,point.y);
+        q.push(east);
+        occupied[point.x+1][point.y] = true;
+
+      }
     }
+
+  if (point.y  < png_.height() -1 ) {
+
+      if(calculateDelta(png_.getPixel(point.x,point.y + 1),comparePixel) <=tolerance_ && !occupied[point.x][point.y+1]){
+        Point south(point.x,point.y + 1);
+        q.push(south);
+        occupied[point.x][point.y + 1] = true;
+      }
   }
-  if(point.y < (pngbfs.height() -1)){
-    double real_told = getcalculateDelta(pngbfs.getPixel(point.x, point.y+1), origin);
-    if(real_told< tolerancebfs && list[point.x][point.y+1] == 0){
-      Point down(point.x, point.y+1);
-      q.push(down);
-    }
+  if (point.x < png_.width() -1 && (int)point.x  >= 1 ) {
+
+      if(calculateDelta(png_.getPixel(point.x -1,point.y),comparePixel) <=tolerance_&&  !occupied[point.x - 1][point.y]){
+        Point west(point.x-1,point.y);
+        q.push(west);
+        occupied[point.x-1][point.y] = true;
+      }
   }
-  if(point.x > 0 && point.x <= (pngbfs.width()-1) ){
-    double real_toll = getcalculateDelta(pngbfs.getPixel(point.x-1, point.y), origin);
-    if(real_toll < tolerancebfs && list[point.x-1][point.y] == 0){
-      Point left(point.x-1, point.y);
-      q.push(left);
-    }
-  }
-  if(point.y > 0 && point.y <= (pngbfs.height() -1)){
-    double real_tolu = getcalculateDelta(pngbfs.getPixel(point.x, point.y-1), origin);
-    if(real_tolu < tolerancebfs && list[point.x][point.y-1] == 0){
-      Point up(point.x, point.y -1);
-      q.push(up);
-    }
+  if (point.y  < png_.height() -1 && (int)point.y  >= 1 ) {
+
+      if(calculateDelta(png_.getPixel(point.x ,point.y - 1),comparePixel) <=tolerance_&&  !occupied[point.x][point.y - 1]){
+        Point north(point.x,point.y - 1);
+        q.push(north);
+        occupied[point.x][point.y - 1] = true;
+      }
   }
 }
 
@@ -92,16 +106,17 @@ void BFS::add(const Point & point) {
  */
 Point BFS::pop() {
   /** @todo [Part 1] */
-  Point top = q.front();
+  Point temp = q.front();
   q.pop();
-  return top;
+  return temp;
 }
 
 /**
  * Returns the current Point in the traversal.
  */
-Point BFS::peek() const {
+Point BFS::peek() {
   /** @todo [Part 1] */
+
   return q.front();
 }
 
@@ -110,15 +125,5 @@ Point BFS::peek() const {
  */
 bool BFS::empty() const {
   /** @todo [Part 1] */
-  if(q.empty())
-    return true;
-  else
-    return false;
-}
-
-BFS::~BFS(){
-  for(unsigned i=0; i<pngbfs.width(); i++){
-    delete list[i];
-  }
-  delete list;
+  return q.empty();
 }

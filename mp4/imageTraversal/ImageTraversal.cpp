@@ -28,21 +28,19 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
   return sqrt( (h*h) + (s*s) + (l*l) );
 }
 
-double ImageTraversal::getcalculateDelta(HSLAPixel & p1, HSLAPixel & p2){
-  return calculateDelta(p1, p2);
-}
 /**
  * Default iterator constructor.
  */
+
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
   traversal = NULL;
 }
 
-ImageTraversal::Iterator::Iterator(ImageTraversal*traversalold){
-  traversal = traversalold;
-  current = traversal->start_;
-}
+// ImageTraversal::Iterator::Iterator(ImageTraversal* temp){
+//   traversal = temp;
+//   curr = traversal->start_;
+// }
 
 /**
  * Iterator increment opreator.
@@ -51,29 +49,22 @@ ImageTraversal::Iterator::Iterator(ImageTraversal*traversalold){
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
-  if(!traversal->empty()){
-    current = traversal->pop();
-    traversal->list[current.x][current.y] = 1;
-    while(!traversal->empty() && traversal->list[traversal->peek().x][traversal->peek().y] == 1)
-      Point junk = traversal->pop();
-    traversal->add(current);
-
-    if(traversal->empty())
-      traversal = NULL;
-    else
-      current = traversal->peek();
-    }
+  if (!traversal->empty()) {
+        curr = traversal->pop();
+        traversal->add(curr);
+        curr = traversal->peek();
+      }
   return *this;
 }
 
 /**
  * Iterator accessor opreator.
  *
- * Accesses the current Point in the ImageTraversal.
+ * Accesses the curr Point in the ImageTraversal.
  */
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
-  return traversal->peek();
+  return curr;
 }
 
 /**
@@ -83,16 +74,12 @@ Point ImageTraversal::Iterator::operator*() {
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
-  bool thisEmpty = false;
-  bool otherEmpty = false;
 
-  if (traversal == NULL) { thisEmpty = true; }
-  if (other.traversal == NULL) { otherEmpty = true; }
+      bool compare1 = traversal == nullptr ? 1 : 0;
+      bool compare2 = other.traversal == nullptr ? 1 : 0;
+      compare1 = !compare1 ? traversal->empty() : compare1;
+      compare2 = !compare2 ? other.traversal->empty() : compare2;
+      if (compare1 && compare2) return 0; 
+      else{  return (!compare1 && !compare2) ? traversal != other.traversal : 1;}
 
-  if (!thisEmpty)  { thisEmpty = traversal->empty(); }
-  if (!otherEmpty) { otherEmpty = other.traversal->empty(); }
-
-  if (thisEmpty && otherEmpty) return false; // both empty then the traversals are equal, return true
-  else if ((!thisEmpty)&&(!otherEmpty)) return (traversal != other.traversal); //both not empty then compare the traversals
-  else return true; // one is empty while the other is not, return true
 }

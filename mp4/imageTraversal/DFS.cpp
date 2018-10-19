@@ -1,3 +1,4 @@
+
 #include <iterator>
 #include <cmath>
 #include <list>
@@ -17,27 +18,33 @@
  * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
  * it will not be included in this DFS
  */
-DFS::DFS(const PNG & png, const Point & start, double tolerance) {
+DFS::DFS(const PNG & png, const Point & start, double tolerance)
+ {
   /** @todo [Part 1] */
-  pngdfs = png;
-  start_ = start;
-  tolerancedfs = tolerance;
+  start_= start;
+  png_ = (png);
+  tolerance_ = (tolerance);
+
   s.push(start_);
-  list = new int*[png.width()];
-  for(unsigned i=0; i<png.width(); i++){
-    list[i] = new int[png.height()];
-    for(unsigned j=0; j<png.height(); j++){
-      list[i][j] = 0;
+
+  occupied.resize(png.width(),vector<bool>(png_.height()));
+
+  for(unsigned int i = 0; i < png_.width(); i++)
+    for(unsigned int j = 0; j < png_.height(); j++){
+      occupied[i][j] = false;
     }
-  }
 }
+
+
 
 /**
  * Returns an iterator for the traversal starting at the first point.
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  ImageTraversal* traversal = new DFS(pngdfs, start_, tolerancedfs);
+  // DFS * temp = new DFS(png_, start_, tolerance_);
+  // return ImageTraversal::Iterator(*temp,start_);
+  ImageTraversal * traversal = new DFS(png_, start_, tolerance_);
   return ImageTraversal::Iterator(traversal);
 }
 
@@ -54,35 +61,46 @@ ImageTraversal::Iterator DFS::end() {
  */
 void DFS::add(const Point & point) {
   /** @todo [Part 1] */
-  HSLAPixel origin = pngdfs.getPixel(start_.x, start_.y);
-if(point.x < (pngdfs.width()-1)){
-  double real_tolr = getcalculateDelta(pngdfs.getPixel(point.x+1, point.y), origin);
-  if(real_tolr < tolerancedfs && list[point.x+1][point.y] == 0){
-    Point right(point.x+1, point.y);
-    s.push(right);
+
+
+  HSLAPixel & comparePixel = png_.getPixel(start_.x,start_.y);
+
+
+  if (point.x < png_.width() -1)
+    {
+      if(calculateDelta(png_.getPixel(point.x + 1,point.y),comparePixel) <=tolerance_  && !occupied[point.x+1][point.y]){
+        Point east(point.x+1,point.y);
+        s.push(east);
+      //  occupied[point.x+1][point.y] = true;
+
+      }
+    }
+
+  if (point.y  < png_.height() -1 ) {
+
+      if(calculateDelta(png_.getPixel(point.x,point.y + 1),comparePixel) <=tolerance_ && !occupied[point.x][point.y+1]){
+        Point south(point.x,point.y + 1);
+        s.push(south);
+        //occupied[point.x][point.y + 1] = true;
+      }
   }
-}
-if(point.y < (pngdfs.height() -1)){
-  double real_told = getcalculateDelta(pngdfs.getPixel(point.x, point.y+1), origin);
-  if(real_told< tolerancedfs && list[point.x][point.y+1] == 0){
-    Point down(point.x, point.y+1);
-    s.push(down);
+  if ((int)point.x  >= 1 ) {
+
+      if(calculateDelta(png_.getPixel(point.x -1,point.y),comparePixel) <=tolerance_&&  !occupied[point.x - 1][point.y]){
+        Point west(point.x-1,point.y);
+        s.push(west);
+        //occupied[point.x-1][point.y] = true;
+      }
   }
-}
-if(point.x > 0 && point.x <= (pngdfs.width()-1) ){
-  double real_toll = getcalculateDelta(pngdfs.getPixel(point.x-1, point.y), origin);
-  if(real_toll < tolerancedfs && list[point.x-1][point.y] == 0){
-    Point left(point.x-1, point.y);
-    s.push(left);
+  if ((int)point.y  >= 1 ) {
+
+      if(calculateDelta(png_.getPixel(point.x ,point.y - 1),comparePixel) <=tolerance_&&  !occupied[point.x][point.y - 1]){
+        Point north(point.x,point.y - 1);
+        s.push(north);
+        //occupied[point.x][point.y - 1] = true;
+      }
   }
-}
-if(point.y > 0 && point.y <= (pngdfs.height() -1)){
-  double real_tolu = getcalculateDelta(pngdfs.getPixel(point.x, point.y-1), origin);
-  if(real_tolu < tolerancedfs && list[point.x][point.y-1] == 0){
-    Point up(point.x, point.y -1);
-    s.push(up);
-  }
-}
+
 }
 
 /**
@@ -90,17 +108,29 @@ if(point.y > 0 && point.y <= (pngdfs.height() -1)){
  */
 Point DFS::pop() {
   /** @todo [Part 1] */
-  Point top = s.top();
-  s.pop();
-  return top;
+    Point temp = s.top();
+    if(empty()) {return Point(0,0);}
+    else{
+      while(occupied[temp.x][temp.y]){
+        s.pop();
+      }
+    }
+    occupied[temp.x][temp.y] = true;
+    s.pop();
+    return temp;
 }
 
 /**
  * Returns the current Point in the traversal.
  */
-Point DFS::peek() const {
+Point DFS::peek() {
   /** @todo [Part 1] */
-  return s.top();
+  Point temp = s.top();
+  while((!empty()) && occupied[temp.x][temp.y]) {
+      s.pop();
+  }
+  if(empty()){return Point(0,0);}
+  else{return temp;}
 }
 
 /**
@@ -108,15 +138,5 @@ Point DFS::peek() const {
  */
 bool DFS::empty() const {
   /** @todo [Part 1] */
-  if(s.empty())
-    return true;
-  else
-    return false;
-}
-
-DFS::~DFS(){
-  for(unsigned i=0; i<pngdfs.width(); i++){
-    delete list[i];
-  }
-  delete list;
+  return s.empty();
 }

@@ -2,8 +2,7 @@
  * @file DFS.h
  */
 
-#ifndef DFS_H
-#define DFS_H
+#pragma once
 
 #include <iterator>
 #include <cmath>
@@ -47,5 +46,3 @@ private:
 	stack<Point> s;
 
 };
-
-#endif

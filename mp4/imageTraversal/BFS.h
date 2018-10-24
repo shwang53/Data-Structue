@@ -2,8 +2,7 @@
  * @file BFS.h
  */
 
-#ifndef BFS_H
-#define BFS_H
+#pragma once
 
 #include <iterator>
 #include <cmath>
@@ -47,5 +46,3 @@ private:
 	queue<Point> q;
 
 };
-
-#endif

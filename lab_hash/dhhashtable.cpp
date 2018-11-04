@@ -89,8 +89,27 @@ void DHHashTable<K, V>::insert(K const& key, V const& value)
      *  forget to mark the cell for probing with should_probe!
      */
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    //(void) key;   // prevent warnings... When you implement this function, remove this line.
+    //(void) value; // prevent warnings... When you implement this function, remove this line.
+    ++elems;
+    if(shouldResize()==true){
+      resizeTable();
+    }
+
+    pair<K, V> *temp = new pair<K,V>(key, value);
+    size_t index = hash(key, size);
+
+
+
+    while(should_probe[index] == true){
+  //   index = secondary_hash(key,value);
+      index = (index + 1) % size;
+    }
+
+    table[index] = temp;
+    should_probe[index] = true;
+    return;
+
 }
 
 template <class K, class V>
@@ -99,6 +118,11 @@ void DHHashTable<K, V>::remove(K const& key)
     /**
      * @todo Implement this function
      */
+     if (findIndex(key) != -1) {
+         delete table[findIndex(key)];
+         table[findIndex(key)] = nullptr;
+         --elems;
+     }
 }
 
 template <class K, class V>
@@ -107,7 +131,20 @@ int DHHashTable<K, V>::findIndex(const K& key) const
     /**
      * @todo Implement this function
      */
-    return -1;
+     size_t index = hash(key, size);
+     size_t start = index;
+
+     while (should_probe[index]) {
+         if (table[index] != NULL){
+           if(table[index]->first == key){
+               return index;
+           }
+         }
+         index++;
+         if (index == start){  break; }
+     }
+     return -1;
+
 }
 
 template <class K, class V>
@@ -168,7 +205,7 @@ void DHHashTable<K, V>::resizeTable()
             size_t h = hash(table[slot]->first, newSize);
             size_t jump = secondary_hash(table[slot]->first, newSize);
             size_t i = 0;
-            size_t idx = h; 
+            size_t idx = h;
             while (temp[idx] != NULL)
             {
                 ++i;

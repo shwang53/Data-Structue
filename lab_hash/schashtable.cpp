@@ -8,11 +8,11 @@
  */
 
 #include "schashtable.h"
- 
+
 using hashes::hash;
 using std::list;
 using std::pair;
-  
+
 template <class K, class V>
 SCHashTable<K, V>::SCHashTable(size_t tsize)
 {
@@ -62,6 +62,14 @@ void SCHashTable<K, V>::insert(K const& key, V const& value)
      * @todo Implement this function.
      *
      */
+    ++elems;
+    if (shouldResize()== true){
+      resizeTable();
+    }
+
+    pair<K, V> temp(key, value);
+    size_t index = hash(key, size);
+    table[index].push_front(temp);
 }
 
 template <class K, class V>
@@ -74,17 +82,39 @@ void SCHashTable<K, V>::remove(K const& key)
      * Please read the note in the lab spec about list iterators and the
      * erase() function on std::list!
      */
-    (void) key; // prevent warnings... When you implement this function, remove this line.
+    //(void) key; // prevent warnings... When you implement this function, remove this line.
+        if(keyExists(key) == true){
+          size_t index = hash(key, size);
+
+          for(it = table[index].begin(); it != table[index].end(); it++) {
+
+            if (it->first == key){
+             table[index].erase(it);
+             break;
+           }
+
+       }
+
+     }
+
+     return;
 }
 
 template <class K, class V>
 V SCHashTable<K, V>::find(K const& key) const
 {
-
+    typename list<pair<K, V>>::iterator it;
     /**
      * @todo: Implement this function.
      */
 
+    //return V();
+    size_t index = hash(key, size);
+
+    for (it = table[index].begin(); it != table[index].end(); it++) {
+        if (it->first == key)
+            return it->second;
+    }
     return V();
 }
 
@@ -142,4 +172,21 @@ void SCHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+
+
+    list<pair<K, V>> * temp = new list<pair<K,V>>[findPrime(size * 2)];
+
+    for (size_t i = 0; i < size; i++) {
+        for(it= table[i].begin(); it != table[i].end(); it++){
+
+          size_t index = hash(it->first, findPrime(size * 2));
+          temp[index].push_front(*it);
+
+        }
+    }
+
+    delete[] table;
+    table = temp;
+    size = findPrime(size * 2);
+
 }

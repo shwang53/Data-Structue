@@ -87,8 +87,24 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * Also, don't forget to mark the cell for probing with should_probe!
      */
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    // (void) key;   // prevent warnings... When you implement this function, remove this line.
+    // (void) value; // prevent warnings... When you implement this function, remove this line.
+
+    ++elems;
+    if(shouldResize()==true){
+      resizeTable();
+    }
+
+    pair<K, V> *temp = new pair<K,V>(key, value);
+    size_t index = hash(key, size);
+
+
+    while(should_probe[index] == true){
+         index = (index + 1) % size;
+    }
+
+    table[index] = temp;
+    should_probe[index] = true;
 }
 
 template <class K, class V>
@@ -97,18 +113,37 @@ void LPHashTable<K, V>::remove(K const& key)
     /**
      * @todo: implement this function
      */
+
+    if (findIndex(key) != -1) {
+        delete table[findIndex(key)];
+        table[findIndex(key)] = nullptr;
+        --elems;
+    }
 }
 
 template <class K, class V>
 int LPHashTable<K, V>::findIndex(const K& key) const
 {
-    
+
     /**
      * @todo Implement this function
      *
      * Be careful in determining when the key is not in the table!
      */
 
+    //return -1;
+    size_t index = hash(key, size);
+    size_t start = index;
+
+    while (should_probe[index]) {
+        if (table[index] != NULL){
+          if(table[index]->first == key){
+              return index;
+          }
+        }
+        index++;
+        if (index == start){  break; }
+    }
     return -1;
 }
 
@@ -166,4 +201,35 @@ void LPHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    // size_t newSize = findPrime(size * 2);
+
+    pair<K, V>** temp = new pair<K, V>*[findPrime(size * 2)];
+
+    delete[] should_probe;
+
+    should_probe = new bool[findPrime(size * 2)];
+
+    for (size_t i = 0; i < findPrime(size * 2); i++) {
+        temp[i] = nullptr;
+        should_probe[i] = false;
+    }
+
+    for (size_t i = 0; i < size; i++) {
+
+        if (table[i] != nullptr) {
+
+            size_t index = hash(table[i]->first, findPrime(size * 2));
+
+            while (temp[index] != nullptr){
+              index++;
+            }
+
+            temp[index] = table[i];
+            should_probe[index] = true;
+        }
+    }
+
+    delete[] table;
+    table = temp;
+    size = findPrime(size * 2);
 }

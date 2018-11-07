@@ -43,9 +43,11 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
      double potential_sum = 0, current_sum = 0;
 
      //calculating the distance from target to potential and currentBest.
-     for(int i=0; i< Dim; i++){
-        potential_sum += pow(potential[i]-target[i],2);
-        current_sum += pow(currentBest[i]-target[i],2);
+     for(double i=0; i< Dim; i++){
+        //potential_sum += pow(potential[i]-target[i],2);
+        //current_sum += pow(currentBest[i]-target[i],2);
+        potential_sum += (potential[i]-target[i]) * (potential[i]-target[i]) ;
+        current_sum += (currentBest[i]-target[i]) * (currentBest[i]-target[i]) ;
      }
 
      //if the distances are same, return true if current is bigger than potential.
@@ -71,6 +73,7 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 
      //initialize theArray and root.
      theArray = newPoints;
+    //  if (newPoints.size() == 1) return;
      root = buildKDTree(theArray, 0, newPoints.size()-1, 0);
 }
 
@@ -159,10 +162,10 @@ Point<Dim> KDTree<Dim>::helper_findNearest(const Point<Dim>& query, KDTreeNode* 
 
     //find potential, if other theNode can be nearer.
     if(smallerDimVal(query, theNode->point, dimension % Dim)) {
-        double tempo1 = pow(( theNode->point[dimension%Dim] - query[dimension%Dim]),2);
+        double tempo1 = ( theNode->point[dimension%Dim] - query[dimension%Dim]) * ( theNode->point[dimension%Dim] - query[dimension%Dim]);
         double tempo2 =0;
         for(double i = 0; i< Dim; i++){
-          tempo2 += pow((query[i]-currentBest[i]),2);
+          tempo2 += (query[i]-currentBest[i]) * (query[i]-currentBest[i]);
         }
 
         if (theNode->right != NULL && tempo1 <= tempo2) {
@@ -174,10 +177,10 @@ Point<Dim> KDTree<Dim>::helper_findNearest(const Point<Dim>& query, KDTreeNode* 
 
     }
     else {
-        double tempo3 = pow(( theNode->point[dimension%Dim] - query[dimension%Dim]),2);
+        double tempo3 = ( theNode->point[dimension%Dim] - query[dimension%Dim]) * ( theNode->point[dimension%Dim] - query[dimension%Dim]);
         double tempo4 =0;
         for(double i = 0; i< Dim; i++){
-          tempo4 += pow((query[i]-currentBest[i]),2);
+          tempo4 += (query[i]-currentBest[i]) * (query[i]-currentBest[i]);
         }
         if (theNode->left != NULL && tempo3 <= tempo4) {
             potential = helper_findNearest(query, theNode->left, dimension + 1);
@@ -207,7 +210,7 @@ typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::buildKDTree(vector<Point<Dim>>&t
   //(the base case) if left > right, return nullptr;
   if(left > right) {return NULL;}
 
-  int median = floor((left + right)/2);
+  double median = floor((left + right)/2);
   quick_select(theArray, left, right, median, dimension);
 
   //create new node that carrys theArray[median] and spread to left and then right.
@@ -238,7 +241,7 @@ void KDTree<Dim>::quick_select(vector<Point<Dim>>& theArray, int left, int right
   if (left >= right) {return;}
 
   //create pivotIndex at median (take a guess).
-  int pivotIndex = partition(theArray, left, right,  floor((left + right)/2), dimension);
+  double pivotIndex = partition(theArray, left, right,  floor((left + right)/2), dimension);
 
   //if wrong, adjust little bit to the median.
   if(median > pivotIndex) { quick_select(theArray, pivotIndex+1, right, median, dimension);}
@@ -258,7 +261,7 @@ int KDTree<Dim>::partition(vector<Point<Dim>>& theArray, int left, int right, in
 
   //pull element at pivot index from array.
   Point<Dim> data_ = theArray[pivotIndex];
-  int count = left;
+  double count = left;
 
   // Point<Dim> temp = theArray[pivotIndex];
   // theArray[pivotIndex] = theArray[right];
@@ -267,7 +270,7 @@ int KDTree<Dim>::partition(vector<Point<Dim>>& theArray, int left, int right, in
 
   //- put smaller elements on left.
   //- put larger elements on right.
-  for(int i = left; i < right; i++){
+  for(double i = left; i < right; i++){
     if (smallerDimVal(theArray[i], data_, dimension)==true) {
         swap(theArray[count], theArray[i]);
         count++;

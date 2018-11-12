@@ -5,8 +5,8 @@
 
 //Creates n unconnected root nodes at the end of the vector.
 // create "num" of elements.
-void DisjointSets::addelements(int num) {
-	for (int i=0; i<num; i++)
+void DisjointSets::addelements(int n) {
+	for (int i=0; i<n; i++)
 	{
 		noname.push_back(-1);
 	}
@@ -16,14 +16,14 @@ void DisjointSets::addelements(int num) {
 //This function should compress paths and works as described in lecture.
 //Returns : the index of the root of the up-tree in which the parameter element resides.
 
-int DisjointSets::find(int elem) {
+int DisjointSets::find(int e) {
 
-	if (noname[elem] < 0){
-      return elem;
+	if (noname[e] < 0){
+      return e;
   }
 
-    noname[elem] = find(noname[elem]);
-    return find(noname[elem]);
+    noname[e] = find(noname[e]);
+    return find(noname[e]);
 
 }
 
@@ -61,7 +61,7 @@ void DisjointSets::setunion(int a, int b) {
 // This function should return the number of nodes in the up-tree containing the element.
 // Returns : number of nodes in the up-tree containing the element
 
-int DisjointSets::size(int elem) {
-	int temp = find(elem);
+int DisjointSets::size(int e) {
+	int temp = find(e);
 	return -1*noname[temp];
 }

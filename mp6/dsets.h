@@ -12,10 +12,10 @@ class DisjointSets
 {
 	public:
 	//	DisjointSets ();
-		void addelements (int num);
-		int find (int elem);
+		void addelements (int n);
+		int find (int e);
 		void setunion (int a, int b);
-		int size (int elem);
+		int size (int e);
 
 	private:
 		vector<int> noname;

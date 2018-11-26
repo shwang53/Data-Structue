@@ -11,6 +11,7 @@ You can find additional information, including assignment descriptions, by visit
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> release/mp1
@@ -28,3 +29,5 @@ You can find additional information, including assignment descriptions, by visit
 >>>>>>> release/lab_heaps
 =======
 >>>>>>> release/mp6
+=======
+>>>>>>> release/lab_dict

@@ -34,6 +34,7 @@ AnagramDict::AnagramDict(const string& filename)
           string temp = word;
 
           std::sort(temp.begin(), temp.end());
+          
           dict[temp].push_back(word);
         }
 

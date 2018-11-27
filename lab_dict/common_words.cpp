@@ -84,7 +84,7 @@ vector<string> CommonWords::get_common_words(unsigned int n) const
           string word = temp.first;
           bool check = true;
 
-          for(size_t i=0; i < file_word_maps.size() ; i++){
+          for(size_t i=0; i < file_word_maps.size(); i++){
             if (file_word_maps[i].at(word) < n){
                  check = false;
              }

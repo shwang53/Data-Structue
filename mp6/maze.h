@@ -20,7 +20,7 @@ class SquareMaze{
 
 private:
 
-  vector<int> down; 
+  vector<int> down;
   vector<int> right;
   int width;
   int height;
@@ -36,6 +36,9 @@ public:
    vector<int> solveMaze();
    cs225::PNG * drawMaze() const;
    cs225::PNG * drawMazeWithSolution();
+
+PNG * drawCreativeMaze();
+
 };
 
 #endif

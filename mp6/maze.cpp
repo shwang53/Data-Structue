@@ -381,19 +381,29 @@ PNG * SquareMaze::drawCreativeMaze()  {
 
   PNG* raw = new PNG(width*10 + 1, height*10 + 1);
 
-  for (int i = 0; i < height*10 + 1; i++) {
-    HSLAPixel& p = raw->getPixel(0, i);
-    p.h = 255;
-		p.s = 1;
-    p.l = 0.7;
-  }
+  // int small = height < width ? height :width;
+  //
 
-  for (int i = 10; i < width*10 + 1; i++) {
-    HSLAPixel& p = raw->getPixel(i, 0);
-    p.l = 0.7;
-    p.h = width*height % 360;
-    p.s = 1;
-  }
+
+    for (int i = 0; i < height*10 + 1; i++) {
+      HSLAPixel& p = raw->getPixel(0, i);
+      p.h = 255;
+      p.s = 1;
+      p.l = 0.7;
+    }
+
+
+
+    for (int i = 10; i < width*10 + 1; i++) {
+      HSLAPixel& p = raw->getPixel(i, 0);
+      p.l = 0.7;
+      p.h = width*height % 360;
+      p.s = 1;
+    }
+
+
+
+
 
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
@@ -421,5 +431,14 @@ PNG * SquareMaze::drawCreativeMaze()  {
 
     }
   }
+
+  for (int i = 0; i < height + 1; i++) {
+    HSLAPixel& p = raw->getPixel(0, i);
+    p.h = 100;
+    p.s = 1;
+    p.l = 0.8;
+  }
+
+
   return raw;
 }

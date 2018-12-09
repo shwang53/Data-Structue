@@ -91,24 +91,36 @@ void DHHashTable<K, V>::insert(K const& key, V const& value)
 
     //(void) key;   // prevent warnings... When you implement this function, remove this line.
     //(void) value; // prevent warnings... When you implement this function, remove this line.
-    ++elems;
-    if(shouldResize()==true){
-      resizeTable();
-    }
+  //   ++elems;
+  //   if(shouldResize()==true){
+  //     resizeTable();
+  //   }
+  //
+  //   pair<K, V> *temp = new pair<K,V>(key, value);
+  //   size_t index = hash(key, size);
+  //
+  //
+  //
+  //   while(should_probe[index] == true){
+  // //   index = secondary_hash(key,value);
+  //     index = (index + 1) % size;
+  //   }
+  //
+  //   table[index] = temp;
+  //   should_probe[index] = true;
+  //   return;
 
-    pair<K, V> *temp = new pair<K,V>(key, value);
-    size_t index = hash(key, size);
-
-
-
-    while(should_probe[index] == true){
-  //   index = secondary_hash(key,value);
-      index = (index + 1) % size;
-    }
-
-    table[index] = temp;
-    should_probe[index] = true;
-    return;
+  elems++;
+  if(shouldResize()){
+    resizeTable();
+  }
+  size_t num = hash(key,this->size);
+  while(table[num]){
+    num = (num+1)%this->size;
+  }
+  pair<K,V> *newPair = new pair<K,V>(key,value);
+  table[num] = newPair;
+  should_probe[num] = true;
 
 }
 
@@ -118,10 +130,16 @@ void DHHashTable<K, V>::remove(K const& key)
     /**
      * @todo Implement this function
      */
-     if (findIndex(key) != -1) {
-         delete table[findIndex(key)];
-         table[findIndex(key)] = nullptr;
-         --elems;
+     // if (findIndex(key) != -1) {
+     //     delete table[findIndex(key)];
+     //     table[findIndex(key)] = nullptr;
+     //     --elems;
+     // }
+     int index = findIndex(key);
+     if(index != -1){
+       delete table[index];
+       table[index] = nullptr;
+       elems--;
      }
 }
 
@@ -191,33 +209,67 @@ void DHHashTable<K, V>::clear()
 template <class K, class V>
 void DHHashTable<K, V>::resizeTable()
 {
-    size_t newSize = findPrime(size * 2);
-    pair<K, V>** temp = new pair<K, V>*[newSize];
+    // size_t newSize = findPrime(size * 2);
+    // pair<K, V>** temp = new pair<K, V>*[newSize];
+    // delete[] should_probe;
+    // should_probe = new bool[newSize];
+    // for (size_t i = 0; i < newSize; i++) {
+    //     temp[i] = NULL;
+    //     should_probe[i] = false;
+    // }
+    //
+    // for (size_t slot = 0; slot < size; slot++) {
+    //     if (table[slot] != NULL) {
+    //         size_t h = hash(table[slot]->first, newSize);
+    //         size_t jump = secondary_hash(table[slot]->first, newSize);
+    //         size_t i = 0;
+    //         size_t idx = h;
+    //         while (temp[idx] != NULL)
+    //         {
+    //             ++i;
+    //             idx = (h + jump*i) % newSize;
+    //         }
+    //         temp[idx] = table[slot];
+    //         should_probe[idx] = true;
+    //     }
+    // }
+    //
+    // delete[] table;
+    // // don't delete elements since we just moved their pointers around
+    // table = temp;
+    // size = newSize;
+
+    size_t newSize = findPrime(size*2);
+
+    pair<K,V>** temp = new pair<K,V>*[newSize];
+
     delete[] should_probe;
     should_probe = new bool[newSize];
-    for (size_t i = 0; i < newSize; i++) {
-        temp[i] = NULL;
-        should_probe[i] = false;
+
+    for(size_t i=0; i<newSize; i++){
+      temp[i] = nullptr;
+      should_probe[i] = false;
     }
 
-    for (size_t slot = 0; slot < size; slot++) {
-        if (table[slot] != NULL) {
-            size_t h = hash(table[slot]->first, newSize);
-            size_t jump = secondary_hash(table[slot]->first, newSize);
-            size_t i = 0;
-            size_t idx = h;
-            while (temp[idx] != NULL)
-            {
-                ++i;
-                idx = (h + jump*i) % newSize;
-            }
-            temp[idx] = table[slot];
-            should_probe[idx] = true;
+    for(size_t slot = 0; slot < size; slot++){
+      if(table[slot] != NULL){
+        size_t h = hash(table[slot]->first, newSize);
+        size_t jump = secondary_hash(table[slot]->first, newSize);
+        size_t i = 0;
+        size_t idx = h;
+
+        while(temp[idx] != NULL){
+          ++i;
+          idx = (h + i*jump) %newSize;
         }
-    }
 
+        temp[idx] = table[slot];
+        should_probe[idx] = true;
+      }
+    }
     delete[] table;
-    // don't delete elements since we just moved their pointers around
     table = temp;
     size = newSize;
+
+
 }

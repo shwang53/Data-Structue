@@ -14,6 +14,7 @@ You can find additional information, including assignment descriptions, by visit
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> release/mp1
@@ -37,3 +38,5 @@ You can find additional information, including assignment descriptions, by visit
 >>>>>>> release/lab_ml
 =======
 >>>>>>> release/mp7
+=======
+>>>>>>> release/lab_flow

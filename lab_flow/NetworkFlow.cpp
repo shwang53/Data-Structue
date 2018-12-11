@@ -35,6 +35,7 @@ NetworkFlow::NetworkFlow(Graph & startingGraph, Vertex source, Vertex sink) :
     flow_.insertEdge((*it).source, (*it).dest);
     flow_.setEdgeWeight((*it).source, (*it).dest, 0);
   }
+  
   maxFlow_ = 0;
 
 }

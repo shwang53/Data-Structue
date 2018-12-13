@@ -98,15 +98,15 @@ template <class V, class E>
 void Graph<V,E>::removeEdge(const std::string key1, const std::string key2) {
   // TODO: Part 2
 
-  for(E_byRef edge : edgeList){
-    std::string check1 = edge.get().source().key();
-    std::string check2 = edge.get().dest().key();
-
-    if(check1 == key1 && check2 == key2){
-      edgeList.erase(edge);
-      return;
-    }
-  }
+  // for(E_byRef edge : edgeList){
+  //   std::string check1 = edge.get().source().key();
+  //   std::string check2 = edge.get().dest().key();
+  //
+  //   if(check1 == key1 && check2 == key2){
+  //     edgeList.erase(edge);
+  //     return;
+  //   }
+  // }
 }
 
 

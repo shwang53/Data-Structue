@@ -103,7 +103,7 @@ void Graph<V,E>::removeEdge(const std::string key1, const std::string key2) {
     std::string check2 = edge.get().dest().key();
 
     if(check1 == key1 && check2 == key2){
-      edgeList.remove(edge);
+      edgeList.erase(edge);
       return;
     }
   }
